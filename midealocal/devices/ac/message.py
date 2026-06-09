@@ -658,6 +658,7 @@ class MessageNewProtocolSet(MessageACBase):
         self.indirect_wind: bytes | None = None
         self.prompt_tone: bytes | None = None
         self.breezeless: bytes | None = None
+        self.cool_hot_sense: bytes | None = None
         self.screen_display_alternate: bytes | None = None
         self.fresh_air_1: bytes | None = None
         self.fresh_air_2: bytes | None = None
@@ -677,6 +678,14 @@ class MessageNewProtocolSet(MessageACBase):
                 NewProtocolMessageBody.pack(
                     param=NewProtocolTags.breezeless,
                     value=bytearray([0x01 if self.breezeless else 0x00]),
+                ),
+            )
+        if self.cool_hot_sense is not None:
+            pack_count += 1
+            payload.extend(
+                NewProtocolMessageBody.pack(
+                    param=NewProtocolTags.cool_hot_sense,
+                    value=bytearray([0x01 if self.cool_hot_sense else 0x00]),
                 ),
             )
         if self.indirect_wind is not None:
@@ -896,6 +905,8 @@ class XBXMessageBody(NewProtocolMessageBody):
             self.indoor_humidity = indoor_humidity if indoor_humidity != 0 else None
         if NewProtocolTags.breezeless in params:
             self.breezeless = params[NewProtocolTags.breezeless][0] == 1
+        if NewProtocolTags.cool_hot_sense in params:
+            self.cool_hot_sense = params[NewProtocolTags.cool_hot_sense][0] == 1
         if NewProtocolTags.screen_display in params:
             self.screen_display_alternate = (
                 params[NewProtocolTags.screen_display][0] > 0
