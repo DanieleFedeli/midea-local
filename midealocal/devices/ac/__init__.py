@@ -460,6 +460,7 @@ class MideaACDevice(MideaDevice):
                 DeviceAttributes.self_clean,
             ]:
                 message = self.make_newprotocol_message_set(attr=attr, value=value)
+                self._attributes[attr] = value
             elif attr in self._attributes:
                 message = self.make_message_uniq_set()
                 if attr in [
